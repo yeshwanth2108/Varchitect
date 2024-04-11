@@ -501,9 +501,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1156,7 +1156,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &394886497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,6 +1170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj_ch: {fileID: 0}
+  btnname: 
 --- !u!114 &394886498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1592,9 +1593,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1858,6 +1859,14 @@ PrefabInstance:
     - target: {fileID: 7287137019966064018, guid: 186741bf17cbb0e4fa3ef06daa1f190f, type: 3}
       propertyPath: m_Name
       value: XRCardboardRig
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287137020755404942, guid: 186741bf17cbb0e4fa3ef06daa1f190f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7287137020755404942, guid: 186741bf17cbb0e4fa3ef06daa1f190f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7287137020755404942, guid: 186741bf17cbb0e4fa3ef06daa1f190f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2281,9 +2290,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2737,10 +2746,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 0
   outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 2
+  outlineWidth: 2.8
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!1 &983599824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7287137020755404948, guid: 186741bf17cbb0e4fa3ef06daa1f190f, type: 3}
+  m_PrefabInstance: {fileID: 517923791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997911345
 GameObject:
   m_ObjectHideFlags: 0
@@ -2754,6 +2768,9 @@ GameObject:
   - component: {fileID: 997911349}
   - component: {fileID: 997911348}
   - component: {fileID: 997911347}
+  - component: {fileID: 997911353}
+  - component: {fileID: 997911352}
+  - component: {fileID: 997911351}
   m_Layer: 5
   m_Name: red
   m_TagString: Untagged
@@ -2849,9 +2866,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: move_Left
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2899,6 +2916,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997911345}
   m_CullTransparentMesh: 1
+--- !u!114 &997911351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997911345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9998bb53e123400095e04c70fd989f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obj_ch: {fileID: 0}
+  btnname: 
+--- !u!114 &997911352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997911345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &997911353
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997911345}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1013325682
 GameObject:
   m_ObjectHideFlags: 0
@@ -3142,9 +3211,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3570,9 +3639,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: move_Left
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3797,7 +3866,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1332905458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3811,6 +3880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj_ch: {fileID: 0}
+  btnname: 
 --- !u!114 &1332905459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3988,7 +4058,7 @@ Transform:
   m_GameObject: {fileID: 1359579616}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.9, y: 0, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 10, y: 7, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -4260,9 +4330,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4626,9 +4696,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: roate_Left
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4687,9 +4757,8 @@ GameObject:
   - component: {fileID: 1727263901}
   - component: {fileID: 1727263900}
   - component: {fileID: 1727263899}
-  - component: {fileID: 1727263902}
   - component: {fileID: 1727263903}
-  - component: {fileID: 1727263904}
+  - component: {fileID: 1727263902}
   m_Layer: 0
   m_Name: Character
   m_TagString: Character
@@ -4710,8 +4779,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  cameraObj: {fileID: 1727263898}
-  joyStickMode: 1
+  cameraObj: {fileID: 983599824}
+  joyStickMode: 0
 --- !u!143 &1727263900
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4737,8 +4806,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727263898}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: 0}
+  m_LocalRotation: {x: 0.006699123, y: 0.99988234, z: 0.0011137035, w: -0.013754025}
+  m_LocalPosition: {x: -17.7, y: 1.2, z: 32.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4746,8 +4815,31 @@ Transform:
   - {fileID: 2066881394}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!120 &1727263902
+  m_LocalEulerAnglesHint: {x: -0.138, y: -538.425, z: 0.766}
+--- !u!114 &1727263902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727263898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76ddacdb9d8de4b908bd83e76fda436a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  source1: {fileID: 0}
+  clip_audio: {fileID: 0}
+  line_rend: {fileID: 1727263903}
+  game_objj: {fileID: 2066881393}
+  menu_loc: {fileID: 2137637852}
+  scale_menu: {fileID: 1332905457}
+  delete_menu: {fileID: 1729274653}
+  plant: {fileID: 1255434223}
+  color_change_menu: {fileID: 1799851519}
+  add_menu: {fileID: 394886496}
+  lenraycast: 10
+--- !u!120 &1727263903
 LineRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4798,8 +4890,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.17490387
-        value: 0.0714283
+        time: 0.022945404
+        value: 0.17117119
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -4846,125 +4938,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &1727263903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727263898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76ddacdb9d8de4b908bd83e76fda436a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  source1: {fileID: 0}
-  clip_audio: {fileID: 0}
-  line_rend: {fileID: 1727263902}
-  game_objj: {fileID: 2066881393}
-  menu_loc: {fileID: 2137637852}
-  scale_menu: {fileID: 1332905457}
-  delete_menu: {fileID: 1729274653}
-  plant: {fileID: 1255434223}
-  color_change_menu: {fileID: 1799851519}
-  add_menu: {fileID: 394886496}
-  lenraycast: 10
---- !u!82 &1727263904
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727263898}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 19c3cb7bea0a140488c116aead9fd506, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1729274653
 GameObject:
   m_ObjectHideFlags: 0
@@ -4984,7 +4957,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1729274654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4998,6 +4971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj_ch: {fileID: 0}
+  btnname: 
 --- !u!114 &1729274655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5688,7 +5662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1799851520
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5728,6 +5702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj_ch: {fileID: 0}
+  btnname: 
 --- !u!114 &1799851522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6172,9 +6147,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6673,9 +6648,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: roate_Left
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6808,9 +6783,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: moveAndRotate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6905,7 +6880,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066881393}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.06, y: 0.38, z: 0.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7020,9 +6995,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1727263902}
         m_TargetAssemblyTypeName: Raycaster, Assembly-CSharp
-        m_MethodName: copy_func
+        m_MethodName: changeColor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7247,7 +7222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2137637853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7348,3 +7323,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obj_ch: {fileID: 0}
+  btnname: 

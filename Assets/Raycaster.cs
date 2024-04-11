@@ -39,6 +39,7 @@ public class Raycaster : MonoBehaviour
     public float lenraycast = 500f;
     private GameObject menuObject;
     private getButtonData buttonTextScript;
+    private graphicraycaster gpray;
     private string buttonData;
 
 
@@ -57,9 +58,9 @@ public class Raycaster : MonoBehaviour
 
     void Update()
     {
-
         buttonData = buttonTextScript.pressedButton;
-        Vector3 ray_obj = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+        Vector3 ray_obj = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+
         if (Physics.Raycast(ray_obj, Camera.main.transform.forward, out RaycastHit hit, lenraycast))
         {
             //source1.PlayOneShot(clip);
@@ -117,21 +118,21 @@ public class Raycaster : MonoBehaviour
             //Debug.Log("chavakka");
             add_menu_objects(endPos);
             add_object(endPos);
-            Debug.Log("whu");
         }
-        rotate_Left();
-        rotate_Right();
-        move_Back();
-        move_Front();
-        move_Left();
-        move_Right();
+        // rotate_Left();
+        // rotate_Right();
+        // move_Back();
+        // move_Front();
+        // move_Left();
+        // move_Right();
         scale_x_down();
         scale_x_up();
         scale_y_down();
         scale_y_up();
-        changeColor();
+        // changeColor();
         delete_plant();
     }
+
     void add_object(Vector3 end)
     {
         if (buttonData == "plant" && Input.GetButtonDown("js1"))
@@ -181,7 +182,7 @@ public class Raycaster : MonoBehaviour
         {
             dis_menu = true;
             menu_loc.SetActive(true);
-            menu_loc.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 5.0f, first_hit.transform.position.z);
+            menu_loc.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 2.0f, first_hit.transform.position.z);
             menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
             disable_chr_ctrl();
         }
@@ -236,13 +237,9 @@ public class Raycaster : MonoBehaviour
 
     public void changeColor()
     {
-
-        if (Input.GetButtonDown("js1"))
-        {
-
             Renderer rend = hit_ref.GetComponent<Renderer>();
-            //Debug.Log(hit_ref.name);
-            //Debug.Log(buttonData);
+            Debug.Log(buttonData);
+
             if (rend != null)
             {
                 if (buttonData == "red")
@@ -269,10 +266,63 @@ public class Raycaster : MonoBehaviour
                 {
                     rend.material.color = Color.white;
                 }
-            }
+                buttonData = "";
             exit_func();
         }
     }
+
+
+    public void moveAndRotate()
+    {
+        if (buttonData == "rotateleft")
+        {
+            hit_ref.transform.rotation = Quaternion.Euler(
+            hit_ref.transform.rotation.eulerAngles.x,
+            hit_ref.transform.rotation.eulerAngles.y - 90,
+            hit_ref.transform.rotation.eulerAngles.z);
+        }
+
+        if (buttonData == "rotateright")
+        {
+            
+            hit_ref.transform.rotation = Quaternion.Euler(
+            hit_ref.transform.rotation.eulerAngles.x,
+            hit_ref.transform.rotation.eulerAngles.y + 90,
+            hit_ref.transform.rotation.eulerAngles.z);
+        }
+
+        if (buttonData == "moveleft")
+        {
+            Vector3 newPosition = hit_ref.transform.position;
+            newPosition.x -= 1;
+            hit_ref.transform.position = newPosition;
+        }
+
+         if (buttonData == "moveright")
+        {
+            Vector3 newPosition = hit_ref.transform.position;
+            newPosition.x += 1;
+            hit_ref.transform.position = newPosition;
+        }
+
+         if (buttonData == "movefront")
+        {
+            Vector3 newPosition = hit_ref.transform.position;
+            newPosition.z += 1;
+            hit_ref.transform.position = newPosition;
+            
+        }
+
+        if (buttonData == "moveback")
+        {
+            Vector3 newPosition = hit_ref.transform.position;
+            newPosition.z -= 1;
+            hit_ref.transform.position = newPosition;
+        }
+        buttonData = "";
+        exit_func();
+    }
+
 
     public void disable_chr_ctrl()
     {
@@ -288,78 +338,12 @@ public class Raycaster : MonoBehaviour
         char_control.enabled = true;
     }
 
-    public void rotate_Left()
-    {
-        if (buttonData == "rotateleft" && Input.GetButtonDown("js1"))
-        {
-            hit_ref.transform.rotation = Quaternion.Euler(
-            hit_ref.transform.rotation.eulerAngles.x,
-            hit_ref.transform.rotation.eulerAngles.y + 90,
-            hit_ref.transform.rotation.eulerAngles.z);
-            exit_func();
-        }
-    }
+    
     public void delete_plant()
     {
         if (buttonData == "delete" && Input.GetButtonDown("js1"))
         {
             hit_ref.SetActive(false);
-            exit_func();
-        }
-    }
-
-    public void rotate_Right()
-    {
-        if (buttonData == "rotateright" && Input.GetButtonDown("js1"))
-        {
-            hit_ref.transform.rotation = Quaternion.Euler(
-            hit_ref.transform.rotation.eulerAngles.x,
-            hit_ref.transform.rotation.eulerAngles.y - 90,
-            hit_ref.transform.rotation.eulerAngles.z);
-            exit_func();
-        }
-    }
-
-    public void move_Left()
-    {
-        if (buttonData == "moveleft" && Input.GetButtonDown("js1"))
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.z += 1;
-            hit_ref.transform.position = newPosition;
-            exit_func();
-        }
-    }
-
-    public void move_Right()
-    {
-        if (buttonData == "moveright" && Input.GetButtonDown("js1"))
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.z -= 1;
-            hit_ref.transform.position = newPosition;
-            exit_func();
-        }
-    }
-
-    public void move_Front()
-    {
-        if (buttonData == "movefront" && Input.GetButtonDown("js1"))
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.x -= 1;
-            hit_ref.transform.position = newPosition;
-            exit_func();
-        }
-    }
-
-    public void move_Back()
-    {
-        if (buttonData == "moveback" && Input.GetButtonDown("js1"))
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.x += 1;
-            hit_ref.transform.position = newPosition;
             exit_func();
         }
     }

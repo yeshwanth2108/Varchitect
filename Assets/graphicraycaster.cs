@@ -67,7 +67,7 @@ public class graphicraycaster : MonoBehaviour
         CheckButtonClicked(hitObject);
     }
 
-    HashSet<string> specialObjectNames = new HashSet<string> { "Cut", "Copy", "Exit" };
+    HashSet<string> specialObjectNames = new HashSet<string> { "Cut", "Copy", "Exit","red" };
 
     bool IsSpecialObject(GameObject obj)
     {
@@ -99,12 +99,11 @@ public class graphicraycaster : MonoBehaviour
         if (clk_btn != null)
         {
             clk_btn.OnPointerEnter(null);
-            if (Input.GetButton("js11"))
+            if (Input.GetButton("js1"))
             {
                 clk_btn.onClick.Invoke();
             }
 
         }
-
     }
 }
