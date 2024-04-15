@@ -99,7 +99,7 @@ public class graphicraycaster : MonoBehaviour
         if (clk_btn != null)
         {
             clk_btn.OnPointerEnter(null);
-            if (Input.GetButton("js1"))
+            if (Input.GetButton("js7"))
             {
                 clk_btn.onClick.Invoke();
             }

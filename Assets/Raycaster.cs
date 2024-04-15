@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Raycaster : MonoBehaviour
 {
-    public AudioSource source1;
-    public AudioClip clip_audio;
+    public Light light;
+    private bool lighton = false;
     Outline highlightvar;
     public LineRenderer line_rend;
     public GameObject game_objj;
@@ -35,6 +35,7 @@ public class Raycaster : MonoBehaviour
     bool is_scale_menu = false;
     bool is_glob_active = false;
     bool delete_menu_plant = false;
+    bool is_door_open = false;
 
     public float lenraycast = 500f;
     private GameObject menuObject;
@@ -50,7 +51,6 @@ public class Raycaster : MonoBehaviour
         menu_loc.SetActive(false);
         scale_menu.SetActive(false);
         color_change_menu.SetActive(false);
-        //source1.clip = clip_audio;
         menuObject = GameObject.Find("Controller");
         buttonTextScript = menuObject.GetComponent<getButtonData>();
         buttonData = "";
@@ -63,8 +63,6 @@ public class Raycaster : MonoBehaviour
 
         if (Physics.Raycast(ray_obj, Camera.main.transform.forward, out RaycastHit hit, lenraycast))
         {
-            //source1.PlayOneShot(clip);
-            //source1.Play();
             first_hit = hit.collider.gameObject;
             line_rend.SetPosition(0, game_objj.transform.position);
             line_rend.SetPosition(1, hit.point);
@@ -83,10 +81,17 @@ public class Raycaster : MonoBehaviour
                 }
                 else if (first_hit.name.Contains("Plant Pot"))
                 {
-                    Debug.Log("..............................");
                     delete_menu_function();
                 }
-                else if (first_hit.name.Contains("door"))
+                else if (first_hit.name.Contains("Lamp Desk"))
+                {
+                    toggleLight();
+                }
+                else if(first_hit.name.Contains("DoorSingle"))
+                {
+                    toggleDoor();
+                }
+                else if (first_hit.name.Contains("main_door"))
                 {
                     if (Input.GetButtonDown("js1"))
                     {
@@ -115,22 +120,54 @@ public class Raycaster : MonoBehaviour
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             line_rend.SetPosition(0, game_objj.transform.position);
             line_rend.SetPosition(1, endPos);
-            //Debug.Log("chavakka");
             add_menu_objects(endPos);
             add_object(endPos);
         }
-        // rotate_Left();
-        // rotate_Right();
-        // move_Back();
-        // move_Front();
-        // move_Left();
-        // move_Right();
-        scale_x_down();
-        scale_x_up();
-        scale_y_down();
-        scale_y_up();
-        // changeColor();
         delete_plant();
+    }
+
+    void toggleDoor()
+    {
+        if (Input.GetButtonDown("js1") && highlit_enabled == true)
+        {
+            AudioSource source = first_hit.GetComponent<AudioSource>();
+            source.enabled = !source.enabled;
+            if(is_door_open == false)
+            {
+            hit_ref.transform.rotation = Quaternion.Euler(
+            hit_ref.transform.rotation.eulerAngles.x,
+            hit_ref.transform.rotation.eulerAngles.y + 90,
+            hit_ref.transform.rotation.eulerAngles.z);
+            is_door_open = true;
+          }
+            else{
+            hit_ref.transform.rotation = Quaternion.Euler(
+            hit_ref.transform.rotation.eulerAngles.x,
+            hit_ref.transform.rotation.eulerAngles.y -90,
+            hit_ref.transform.rotation.eulerAngles.z);
+            is_door_open = false;
+            }        
+        }
+    }
+
+
+    void toggleLight()
+    {
+        if (Input.GetButtonDown("js1"))
+        {
+            AudioSource source = first_hit.GetComponent<AudioSource>();
+            source.enabled = !source.enabled;
+            if (lighton)
+            {
+                light.color = Color.black;
+                lighton = !lighton;
+            }
+            else
+            {
+                light.color = Color.white;
+                lighton = !lighton;
+            }
+        }
     }
 
     void add_object(Vector3 end)
@@ -143,6 +180,7 @@ public class Raycaster : MonoBehaviour
             exit_func();
         }
     }
+
     void disable_menu()
     {
         if (dis_menu == false)
@@ -150,41 +188,49 @@ public class Raycaster : MonoBehaviour
             menu_loc.SetActive(false);
         }
     }
+
     void add_menu_objects(Vector3 endPos)
     {
 
-        if (Input.GetButtonDown("js0"))
+        if (Input.GetButtonDown("js7"))
         {
             add_plant_bool = true;
             add_menu.SetActive(true);
-            //Debug.Log("vamooooo");
             add_menu.transform.position = endPos;
             add_menu.transform.rotation = Quaternion.LookRotation(add_menu.transform.position - Camera.main.transform.position);
             disable_chr_ctrl();
         }
     }
+
     void delete_menu_function()
     {
-        Debug.Log("deletee.......");
-        if (Input.GetButtonDown("js0"))
+        if (Input.GetButtonDown("js7"))
         {
             delete_menu_plant = true;
             delete_menu.SetActive(true);
-            Debug.Log("deletee.......");
             delete_menu.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 1.0f, first_hit.transform.position.z);
             delete_menu.transform.rotation = Quaternion.LookRotation(delete_menu.transform.position - Camera.main.transform.position);
             disable_chr_ctrl();
         }
     }
+
     void menu_functionality()
     {
         if (Input.GetButtonDown("js0") && highlit_enabled == true)
         {
-            dis_menu = true;
-            menu_loc.SetActive(true);
-            menu_loc.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 2.0f, first_hit.transform.position.z);
-            menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
-            disable_chr_ctrl();
+        dis_menu = true;
+        menu_loc.SetActive(true);
+        Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+        float objectHeight = objectBounds.size.y;
+
+        float menuOffset = 1.5f;
+        Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
+                                           objectBounds.max.y + menuOffset, 
+                                           hit_ref.transform.position.z);
+        menu_loc.transform.position = menuPosition;
+        menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
+
+        disable_chr_ctrl();
         }
 
     }
@@ -193,27 +239,46 @@ public class Raycaster : MonoBehaviour
     {
         if (Input.GetButtonDown("js0") && highlit_enabled == true)
         {
-            is_scale_menu = true;
-            scale_menu.SetActive(true);
-            scale_menu.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 1.0f, first_hit.transform.position.z);
-            scale_menu.transform.rotation = Quaternion.LookRotation(scale_menu.transform.position - Camera.main.transform.position);
-            disable_chr_ctrl();
+        is_scale_menu = true;
+        scale_menu.SetActive(true);
+        
+        Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+        float objectHeight = objectBounds.size.y;
+
+        float menuOffset = 1f; 
+        Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
+                                           objectBounds.max.y + menuOffset, 
+                                           hit_ref.transform.position.z);
+        scale_menu.transform.position = menuPosition;
+
+        scale_menu.transform.rotation = Quaternion.LookRotation(scale_menu.transform.position - Camera.main.transform.position);
+
+        disable_chr_ctrl();
         }
 
     }
 
     void color_menu_functionality()
+{
+    if (Input.GetButtonDown("js0") && highlit_enabled == true)
     {
-        if (Input.GetButtonDown("js0"))
-        {
-            dis_col_menu = true;
-            color_change_menu.SetActive(true);
-            color_change_menu.transform.position = new Vector3(first_hit.transform.position.x - 1.0f, first_hit.transform.position.y, first_hit.transform.position.z + 0.5f);
-            color_change_menu.transform.rotation = Quaternion.LookRotation(color_change_menu.transform.position - Camera.main.transform.position);
-            disable_chr_ctrl();
-        }
+        dis_col_menu = true;
+        color_change_menu.SetActive(true);
+        
+        Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+        float objectHeight = objectBounds.size.y;
 
+        float menuOffset = -1.5f; 
+        Vector3 menuPosition = new Vector3(hit_ref.transform.position.x - 1.0f, 
+                                           objectBounds.max.y + menuOffset, 
+                                           hit_ref.transform.position.z - 1f);
+        color_change_menu.transform.position = menuPosition;
+
+        color_change_menu.transform.rotation = Quaternion.LookRotation(color_change_menu.transform.position - Camera.main.transform.position);
+
+        disable_chr_ctrl();
     }
+}
 
     void highlight_on(GameObject oj)
     {
@@ -237,91 +302,79 @@ public class Raycaster : MonoBehaviour
 
     public void changeColor()
     {
-            Renderer rend = hit_ref.GetComponent<Renderer>();
-            Debug.Log(buttonData);
-
-            if (rend != null)
+        Renderer rend = hit_ref.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            if (buttonData == "red")
             {
-                if (buttonData == "red")
-                {
-                    rend.material.color = Color.red;
-                }
-                if (buttonData == "green")
-                {
-                    rend.material.color = Color.green;
-                }
-                if (buttonData == "blue")
-                {
-                    rend.material.color = Color.blue;
-                }
-                if (buttonData == "yellow")
-                {
-                    rend.material.color = Color.yellow;
-                }
-                if (buttonData == "gray")
-                {
-                    rend.material.color = Color.gray;
-                }
-                if (buttonData == "white")
-                {
-                    rend.material.color = Color.white;
-                }
-                buttonData = "";
+                rend.material.color = Color.red;
+            }
+            if (buttonData == "green")
+            {
+                rend.material.color = Color.green;
+            }
+            if (buttonData == "blue")
+            {
+                rend.material.color = Color.blue;
+            }
+            if (buttonData == "yellow")
+            {
+                rend.material.color = Color.yellow;
+            }
+            if (buttonData == "gray")
+            {
+                rend.material.color = Color.gray;
+            }
+            if (buttonData == "white")
+            {
+                rend.material.color = Color.white;
+            }
+            buttonData = "";
             exit_func();
         }
     }
 
 
     public void moveAndRotate()
-    {
-        if (buttonData == "rotateleft")
         {
-            hit_ref.transform.rotation = Quaternion.Euler(
-            hit_ref.transform.rotation.eulerAngles.x,
-            hit_ref.transform.rotation.eulerAngles.y - 90,
-            hit_ref.transform.rotation.eulerAngles.z);
-        }
+            if (buttonData == "rotateleft" || buttonData == "rotateright")
+            {
+                if (buttonData == "rotateleft")
+                {
+                    hit_ref.transform.rotation = Quaternion.Euler(
+                    hit_ref.transform.rotation.eulerAngles.x,
+                    hit_ref.transform.rotation.eulerAngles.y + 90,
+                    hit_ref.transform.rotation.eulerAngles.z);
+                }
+                else if (buttonData == "rotateright")
+                {
+                    hit_ref.transform.rotation = Quaternion.Euler(
+                    hit_ref.transform.rotation.eulerAngles.x,
+                    hit_ref.transform.rotation.eulerAngles.y - 90,
+                    hit_ref.transform.rotation.eulerAngles.z);
+                }
+            }
+            else if (buttonData.StartsWith("move"))
+            {
+                Vector3 cameraForward = Camera.main.transform.forward;
+                Vector3 cameraRight = Camera.main.transform.right;
 
-        if (buttonData == "rotateright")
-        {
-            
-            hit_ref.transform.rotation = Quaternion.Euler(
-            hit_ref.transform.rotation.eulerAngles.x,
-            hit_ref.transform.rotation.eulerAngles.y + 90,
-            hit_ref.transform.rotation.eulerAngles.z);
-        }
+                Vector3 movementDirection = Vector3.zero;
+                if (buttonData == "moveleft")
+                    movementDirection = -cameraRight;
+                else if (buttonData == "moveright")
+                    movementDirection = cameraRight;
+                else if (buttonData == "movefront")
+                    movementDirection = cameraForward;
+                else if (buttonData == "moveback")
+                    movementDirection = -cameraForward;
 
-        if (buttonData == "moveleft")
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.x -= 1;
-            hit_ref.transform.position = newPosition;
-        }
+                hit_ref.transform.position += movementDirection;
 
-         if (buttonData == "moveright")
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.x += 1;
-            hit_ref.transform.position = newPosition;
+            }
+            buttonData = "";
+            exit_func();
         }
-
-         if (buttonData == "movefront")
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.z += 1;
-            hit_ref.transform.position = newPosition;
-            
-        }
-
-        if (buttonData == "moveback")
-        {
-            Vector3 newPosition = hit_ref.transform.position;
-            newPosition.z -= 1;
-            hit_ref.transform.position = newPosition;
-        }
-        buttonData = "";
-        exit_func();
-    }
 
 
     public void disable_chr_ctrl()
@@ -338,7 +391,7 @@ public class Raycaster : MonoBehaviour
         char_control.enabled = true;
     }
 
-    
+
     public void delete_plant()
     {
         if (buttonData == "delete" && Input.GetButtonDown("js1"))
@@ -348,45 +401,36 @@ public class Raycaster : MonoBehaviour
         }
     }
 
-    public void scale_y_down()
+    public void scale_all_dir()
     {
-        if (buttonData == "scaleydown" && Input.GetButtonDown("js1"))
+        if (buttonData == "scaleydown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z -= 0.2f;
             hit_ref.transform.localScale = newPosition;
-            exit_func();
         }
-    }
-    public void scale_y_up()
-    {
-        if (buttonData == "scaleyup" && Input.GetButtonDown("js1"))
+
+        if (buttonData == "scaleyup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z += 0.2f;
             hit_ref.transform.localScale = newPosition;
-            exit_func();
         }
-    }
-    public void scale_x_down()
-    {
-        if (buttonData == "scalexdown" && Input.GetButtonDown("js1"))
+        if (buttonData == "scalexdown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x -= 0.2f;
             hit_ref.transform.localScale = newPosition;
-            exit_func();
         }
-    }
-    public void scale_x_up()
-    {
-        if (buttonData == "scalexup" && Input.GetButtonDown("js1"))
+        if (buttonData == "scalexup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x += 0.2f;
             hit_ref.transform.localScale = newPosition;
-            exit_func();
         }
+        buttonData = "";
+        exit_func();
+
     }
 
 
