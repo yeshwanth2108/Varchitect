@@ -15,6 +15,9 @@ public class Raycaster : MonoBehaviour
     private bool add_plant_bool = false;
 
     public GameObject plant;
+    public GameObject basket;
+    public GameObject cofeetable;
+    public GameObject FreestandMirror;
     public GameObject color_change_menu;
     public GameObject add_menu;
 
@@ -79,8 +82,9 @@ public class Raycaster : MonoBehaviour
                 {
                     menu_functionality_scale();
                 }
-                else if (first_hit.name.Contains("Plant Pot"))
+                else if (first_hit.name.Contains("Plant Pot") || first_hit.name.Contains("Basket") || first_hit.name.Contains("CoffeeTable") || first_hit.name.Contains("FreestandMirror"))
                 {
+                    menu_functionality();
                     delete_menu_function();
                 }
                 else if (first_hit.name.Contains("Lamp Desk"))
@@ -120,10 +124,9 @@ public class Raycaster : MonoBehaviour
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             line_rend.SetPosition(0, game_objj.transform.position);
             line_rend.SetPosition(1, endPos);
+
             add_menu_objects(endPos);
-            add_object(endPos);
         }
-        delete_plant();
     }
 
     void toggleDoor()
@@ -170,15 +173,42 @@ public class Raycaster : MonoBehaviour
         }
     }
 
-    void add_object(Vector3 end)
+    public void add_object()
     {
+        Debug.Log(buttonData);
         if (buttonData == "plant" && Input.GetButtonDown("js1"))
         {
-            plant.SetActive(false);
-            plant.transform.position = end;
-            plant.SetActive(true);
+            GameObject Object_Instance = Instantiate(plant);
+            Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
+            Object_Instance.transform.position = endPos;
+            Object_Instance.SetActive(true);
             exit_func();
         }
+        if (buttonData == "basket" && Input.GetButtonDown("js1"))
+        {
+            GameObject Object_Instance = Instantiate(basket);
+            Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
+            Object_Instance.transform.position = endPos;
+            Object_Instance.SetActive(true);
+            exit_func();
+        }
+         if (buttonData == "cofeetable" && Input.GetButtonDown("js1"))
+        {
+            GameObject Object_Instance = Instantiate(cofeetable);
+            Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
+            Object_Instance.transform.position = endPos;
+            Object_Instance.SetActive(true);
+            exit_func();
+        }
+        if (buttonData == "FreestandMirror" && Input.GetButtonDown("js1"))
+        {
+            GameObject Object_Instance = Instantiate(FreestandMirror);
+            Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
+            Object_Instance.transform.position = endPos;
+            Object_Instance.SetActive(true);
+            exit_func();
+        }
+        buttonData ="";
     }
 
     void disable_menu()
@@ -198,7 +228,6 @@ public class Raycaster : MonoBehaviour
             add_menu.SetActive(true);
             add_menu.transform.position = endPos;
             add_menu.transform.rotation = Quaternion.LookRotation(add_menu.transform.position - Camera.main.transform.position);
-            disable_chr_ctrl();
         }
     }
 
@@ -208,9 +237,18 @@ public class Raycaster : MonoBehaviour
         {
             delete_menu_plant = true;
             delete_menu.SetActive(true);
-            delete_menu.transform.position = new Vector3(first_hit.transform.position.x, first_hit.transform.position.y + 1.0f, first_hit.transform.position.z);
+            
+            Bounds objectBounds = first_hit.GetComponent<Renderer>().bounds;
+            float objectHeight = objectBounds.size.y;
+
+            float menuOffset = 0.5f;
+            Vector3 menuPosition = new Vector3(first_hit.transform.position.x, 
+                                            objectBounds.max.y + menuOffset, 
+                                            first_hit.transform.position.z);
+            delete_menu.transform.position = menuPosition;
+
             delete_menu.transform.rotation = Quaternion.LookRotation(delete_menu.transform.position - Camera.main.transform.position);
-            disable_chr_ctrl();
+
         }
     }
 
@@ -223,14 +261,13 @@ public class Raycaster : MonoBehaviour
         Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
         float objectHeight = objectBounds.size.y;
 
-        float menuOffset = 1.5f;
+        float menuOffset = 2.0f;
         Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
                                            objectBounds.max.y + menuOffset, 
                                            hit_ref.transform.position.z);
         menu_loc.transform.position = menuPosition;
         menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
 
-        disable_chr_ctrl();
         }
 
     }
@@ -245,7 +282,7 @@ public class Raycaster : MonoBehaviour
         Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
         float objectHeight = objectBounds.size.y;
 
-        float menuOffset = 1f; 
+        float menuOffset = 1.0f; 
         Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
                                            objectBounds.max.y + menuOffset, 
                                            hit_ref.transform.position.z);
@@ -253,32 +290,30 @@ public class Raycaster : MonoBehaviour
 
         scale_menu.transform.rotation = Quaternion.LookRotation(scale_menu.transform.position - Camera.main.transform.position);
 
-        disable_chr_ctrl();
         }
 
     }
 
     void color_menu_functionality()
-{
-    if (Input.GetButtonDown("js0") && highlit_enabled == true)
     {
-        dis_col_menu = true;
-        color_change_menu.SetActive(true);
-        
-        Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
-        float objectHeight = objectBounds.size.y;
+        if (Input.GetButtonDown("js0") && highlit_enabled == true)
+        {
+            dis_col_menu = true;
+            color_change_menu.SetActive(true);
+            
+            Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+            float objectHeight = objectBounds.size.y;
 
-        float menuOffset = -1.5f; 
-        Vector3 menuPosition = new Vector3(hit_ref.transform.position.x - 1.0f, 
-                                           objectBounds.max.y + menuOffset, 
-                                           hit_ref.transform.position.z - 1f);
-        color_change_menu.transform.position = menuPosition;
+            float menuOffset = -1.5f; 
+            Vector3 menuPosition = new Vector3(hit_ref.transform.position.x - 1.0f, 
+                                            objectBounds.max.y + menuOffset, 
+                                            hit_ref.transform.position.z - 1f);
+            color_change_menu.transform.position = menuPosition;
 
-        color_change_menu.transform.rotation = Quaternion.LookRotation(color_change_menu.transform.position - Camera.main.transform.position);
+            color_change_menu.transform.rotation = Quaternion.LookRotation(color_change_menu.transform.position - Camera.main.transform.position);
 
-        disable_chr_ctrl();
+        }
     }
-}
 
     void highlight_on(GameObject oj)
     {
@@ -336,60 +371,60 @@ public class Raycaster : MonoBehaviour
 
 
     public void moveAndRotate()
+    {
+        if ( Input.GetButtonDown("js1") && buttonData.StartsWith("rotate"))
         {
-            if (buttonData == "rotateleft" || buttonData == "rotateright")
+            float angle = buttonData == "rotateleft" ? 90f : -90f;
+            Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
+            hit_ref.transform.rotation *= rotation;
+            buttonData = "";
+        }
+        else if (Input.GetButtonDown("js1") && buttonData.StartsWith("move"))
+        {
+            Vector3 cameraForward = Camera.main.transform.forward;
+            Vector3 cameraRight = Camera.main.transform.right;
+
+            Vector3 movementDirection = Vector3.zero;
+            if (buttonData == "moveleft")
+                movementDirection = -cameraRight;
+            else if (buttonData == "moveright")
+                movementDirection = cameraRight;
+            else if (buttonData == "movefront")
+                movementDirection = cameraForward;
+            else if (buttonData == "moveback")
+                movementDirection = -cameraForward;
+
+            movementDirection.Normalize();
+            hit_ref.transform.position += movementDirection;
+
+            if (dis_menu)
             {
-                if (buttonData == "rotateleft")
-                {
-                    hit_ref.transform.rotation = Quaternion.Euler(
-                    hit_ref.transform.rotation.eulerAngles.x,
-                    hit_ref.transform.rotation.eulerAngles.y + 90,
-                    hit_ref.transform.rotation.eulerAngles.z);
-                }
-                else if (buttonData == "rotateright")
-                {
-                    hit_ref.transform.rotation = Quaternion.Euler(
-                    hit_ref.transform.rotation.eulerAngles.x,
-                    hit_ref.transform.rotation.eulerAngles.y - 90,
-                    hit_ref.transform.rotation.eulerAngles.z);
-                }
+                menu_loc.transform.position += movementDirection;
             }
-            else if (buttonData.StartsWith("move"))
-            {
-                Vector3 cameraForward = Camera.main.transform.forward;
-                Vector3 cameraRight = Camera.main.transform.right;
-
-                Vector3 movementDirection = Vector3.zero;
-                if (buttonData == "moveleft")
-                    movementDirection = -cameraRight;
-                else if (buttonData == "moveright")
-                    movementDirection = cameraRight;
-                else if (buttonData == "movefront")
-                    movementDirection = cameraForward;
-                else if (buttonData == "moveback")
-                    movementDirection = -cameraForward;
-
-                hit_ref.transform.position += movementDirection;
-
-            }
+            buttonData = "";
+        }
+        else if(Input.GetButtonDown("js1") && buttonData.StartsWith("exit"))
+        {
             buttonData = "";
             exit_func();
         }
-
-
-    public void disable_chr_ctrl()
-    {
-        ctrl_chr = GameObject.Find("Character");
-        CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
-        char_control.enabled = false;
     }
 
-    public void enable_chr_ctrl()
-    {
-        ctrl_chr = GameObject.Find("Character");
-        CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
-        char_control.enabled = true;
-    }
+
+
+    // public void disable_chr_ctrl()
+    // {
+    //     ctrl_chr = GameObject.Find("Character");
+    //     CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
+    //     char_control.enabled = false;
+    // }
+
+    // public void enable_chr_ctrl()
+    // {
+    //     ctrl_chr = GameObject.Find("Character");
+    //     CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
+    //     char_control.enabled = true;
+    // }
 
 
     public void delete_plant()
@@ -399,37 +434,41 @@ public class Raycaster : MonoBehaviour
             hit_ref.SetActive(false);
             exit_func();
         }
+        buttonData = "";
     }
 
     public void scale_all_dir()
     {
-        if (buttonData == "scaleydown")
+        if (Input.GetButtonDown("js1") && buttonData == "scaleydown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z -= 0.2f;
             hit_ref.transform.localScale = newPosition;
         }
 
-        if (buttonData == "scaleyup")
+        if (Input.GetButtonDown("js1") && buttonData == "scaleyup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z += 0.2f;
             hit_ref.transform.localScale = newPosition;
         }
-        if (buttonData == "scalexdown")
+        if (Input.GetButtonDown("js1") && buttonData == "scalexdown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x -= 0.2f;
             hit_ref.transform.localScale = newPosition;
         }
-        if (buttonData == "scalexup")
+        if (Input.GetButtonDown("js1") && buttonData == "scalexup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x += 0.2f;
             hit_ref.transform.localScale = newPosition;
         }
+        if(Input.GetButtonDown("js1") && buttonData.StartsWith("exit"))
+        {
+            exit_func();
+        }
         buttonData = "";
-        exit_func();
 
     }
 
@@ -440,31 +479,26 @@ public class Raycaster : MonoBehaviour
         {
             dis_menu = false;
             menu_loc.SetActive(false);
-            enable_chr_ctrl();
         }
         if (scale_menu.activeSelf)
         {
             is_scale_menu = false;
             scale_menu.SetActive(false);
-            enable_chr_ctrl();
         }
         if (color_change_menu.activeSelf)
         {
             dis_col_menu = false;
             color_change_menu.SetActive(false);
-            enable_chr_ctrl();
         }
         if (add_menu.activeSelf)
         {
             add_plant_bool = false;
             add_menu.SetActive(false);
-            enable_chr_ctrl();
         }
         if (delete_menu.activeSelf)
         {
             delete_menu_plant = false;
             delete_menu.SetActive(false);
-            enable_chr_ctrl();
         }
     }
 
