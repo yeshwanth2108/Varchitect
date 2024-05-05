@@ -9,7 +9,9 @@ public class Raycaster : MonoBehaviour
     Outline highlightvar;
     public LineRenderer line_rend;
     public GameObject game_objj;
-    public GameObject menu_loc;
+    public GameObject move_menu;
+    public GameObject rot_menu;
+    public GameObject moveorrot_menu;
     public GameObject scale_menu;
     public GameObject delete_menu;
     private bool add_plant_bool = false;
@@ -33,7 +35,9 @@ public class Raycaster : MonoBehaviour
     bool is_cut = false;
     bool is_copy = false;
     bool highlit_enabled = false;
-    bool dis_menu = false;
+    bool move_menu_bool = false;
+    bool rot_menu_bool = false;
+    bool moveorrot_menu_bool = false;
     bool dis_col_menu = false;
     bool is_scale_menu = false;
     bool is_glob_active = false;
@@ -51,7 +55,9 @@ public class Raycaster : MonoBehaviour
     {
         highlightvar = GetComponent<Outline>();
 
-        menu_loc.SetActive(false);
+        move_menu.SetActive(false);
+        rot_menu.SetActive(false);
+        moveorrot_menu.SetActive(false);
         scale_menu.SetActive(false);
         color_change_menu.SetActive(false);
         menuObject = GameObject.Find("Controller");
@@ -84,7 +90,7 @@ public class Raycaster : MonoBehaviour
                 }
                 else if (first_hit.name.Contains("Plant Pot") || first_hit.name.Contains("Basket") || first_hit.name.Contains("CoffeeTable") || first_hit.name.Contains("FreestandMirror"))
                 {
-                    menu_functionality();
+                    movnrot();
                     delete_menu_function();
                 }
                 else if (first_hit.name.Contains("Lamp Desk"))
@@ -104,7 +110,7 @@ public class Raycaster : MonoBehaviour
                 }
                 else
                 {
-                    menu_functionality();
+                    movnrot();
                 }
             }
             else
@@ -175,54 +181,54 @@ public class Raycaster : MonoBehaviour
 
     public void add_object()
     {
-        Debug.Log(buttonData);
-        if (buttonData == "plant" && Input.GetButtonDown("js1"))
+        if (buttonData == "plant" && Input.GetButtonDown("js0"))
         {
             GameObject Object_Instance = Instantiate(plant);
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             Object_Instance.transform.position = endPos;
             Object_Instance.SetActive(true);
-            exit_func();
         }
-        if (buttonData == "basket" && Input.GetButtonDown("js1"))
+        if (buttonData == "basket" && Input.GetButtonDown("js0"))
         {
             GameObject Object_Instance = Instantiate(basket);
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             Object_Instance.transform.position = endPos;
-            Object_Instance.SetActive(true);
-            exit_func();
+            Object_Instance.SetActive(true);    
         }
-         if (buttonData == "cofeetable" && Input.GetButtonDown("js1"))
+         if (buttonData == "cofeetable" && Input.GetButtonDown("js0"))
         {
             GameObject Object_Instance = Instantiate(cofeetable);
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             Object_Instance.transform.position = endPos;
             Object_Instance.SetActive(true);
-            exit_func();
         }
-        if (buttonData == "FreestandMirror" && Input.GetButtonDown("js1"))
+        if (buttonData == "FreestandMirror" && Input.GetButtonDown("js0"))
         {
             GameObject Object_Instance = Instantiate(FreestandMirror);
             Vector3 endPos = Camera.main.transform.position + Camera.main.transform.forward * lenraycast;
             Object_Instance.transform.position = endPos;
             Object_Instance.SetActive(true);
-            exit_func();
+        }
+        if(buttonData.StartsWith("exit") && Input.GetButtonDown("js0"))
+        {
+            if (add_menu.activeSelf)
+            {
+                add_plant_bool = false;
+                add_menu.SetActive(false);
+            }
         }
         buttonData ="";
-    }
-
-    void disable_menu()
-    {
-        if (dis_menu == false)
+        if (add_menu.activeSelf)
         {
-            menu_loc.SetActive(false);
+            add_plant_bool = false;
+            add_menu.SetActive(false);
         }
     }
 
     void add_menu_objects(Vector3 endPos)
     {
 
-        if (Input.GetButtonDown("js7"))
+        if (Input.GetButtonDown("js1"))
         {
             add_plant_bool = true;
             add_menu.SetActive(true);
@@ -233,7 +239,7 @@ public class Raycaster : MonoBehaviour
 
     void delete_menu_function()
     {
-        if (Input.GetButtonDown("js7"))
+        if (Input.GetButtonDown("js1"))
         {
             delete_menu_plant = true;
             delete_menu.SetActive(true);
@@ -252,12 +258,28 @@ public class Raycaster : MonoBehaviour
         }
     }
 
-    void menu_functionality()
+    // void menu_functionality()
+    // {
+    //     dis_menu = true;
+    //     menu_loc.SetActive(true);
+    //     Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+    //     float objectHeight = objectBounds.size.y;
+
+    //     float menuOffset = 2.0f;
+    //     Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
+    //                                        objectBounds.max.y + menuOffset, 
+    //                                        hit_ref.transform.position.z);
+    //     menu_loc.transform.position = menuPosition;
+    //     menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
+
+    // }
+
+    void movnrot()
     {
         if (Input.GetButtonDown("js0") && highlit_enabled == true)
         {
-        dis_menu = true;
-        menu_loc.SetActive(true);
+        moveorrot_menu_bool = true;
+        moveorrot_menu.SetActive(true);
         Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
         float objectHeight = objectBounds.size.y;
 
@@ -265,11 +287,10 @@ public class Raycaster : MonoBehaviour
         Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
                                            objectBounds.max.y + menuOffset, 
                                            hit_ref.transform.position.z);
-        menu_loc.transform.position = menuPosition;
-        menu_loc.transform.rotation = Quaternion.LookRotation(menu_loc.transform.position - Camera.main.transform.position);
+        moveorrot_menu.transform.position = menuPosition;
+        moveorrot_menu.transform.rotation = Quaternion.LookRotation(moveorrot_menu.transform.position - Camera.main.transform.position);
 
         }
-
     }
 
     void menu_functionality_scale()
@@ -282,7 +303,7 @@ public class Raycaster : MonoBehaviour
         Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
         float objectHeight = objectBounds.size.y;
 
-        float menuOffset = 1.0f; 
+        float menuOffset = 1.5f; 
         Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
                                            objectBounds.max.y + menuOffset, 
                                            hit_ref.transform.position.z);
@@ -365,21 +386,24 @@ public class Raycaster : MonoBehaviour
                 rend.material.color = Color.white;
             }
             buttonData = "";
-            exit_func();
-        }
+        if (color_change_menu.activeSelf)
+        {
+            dis_col_menu = false;
+            color_change_menu.SetActive(false);
+        }        }
     }
 
 
     public void moveAndRotate()
     {
-        if ( Input.GetButtonDown("js1") && buttonData.StartsWith("rotate"))
+        if ( Input.GetButtonDown("js0") && buttonData.StartsWith("rotate"))
         {
             float angle = buttonData == "rotateleft" ? 90f : -90f;
             Quaternion rotation = Quaternion.Euler(0f, angle, 0f);
             hit_ref.transform.rotation *= rotation;
             buttonData = "";
         }
-        else if (Input.GetButtonDown("js1") && buttonData.StartsWith("move"))
+        else if (Input.GetButtonDown("js0") && buttonData.StartsWith("move"))
         {
             Vector3 cameraForward = Camera.main.transform.forward;
             Vector3 cameraRight = Camera.main.transform.right;
@@ -397,110 +421,124 @@ public class Raycaster : MonoBehaviour
             movementDirection.Normalize();
             hit_ref.transform.position += movementDirection;
 
-            if (dis_menu)
+            if (move_menu_bool)
             {
-                menu_loc.transform.position += movementDirection;
+                move_menu.transform.position += movementDirection;
             }
             buttonData = "";
         }
-        else if(Input.GetButtonDown("js1") && buttonData.StartsWith("exit"))
+        else if(Input.GetButtonDown("js0") && buttonData.StartsWith("exit"))
         {
-            buttonData = "";
-            exit_func();
+            buttonData = "";    
+        if (move_menu.activeSelf)
+        {
+            move_menu_bool = false;
+            move_menu.SetActive(false);
+        }
+        if (rot_menu.activeSelf)
+        {
+            rot_menu_bool = false;
+            rot_menu.SetActive(false);
+        }       
         }
     }
 
+    public void movnrot_menu()
+    {
+        if ( Input.GetButtonDown("js0") && buttonData.StartsWith("Move"))
+        {
+            move_menu_bool = true;
+            move_menu.SetActive(true);
+            Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+            float objectHeight = objectBounds.size.y;
 
+            float menuOffset = 2.0f;
+            Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
+                                            objectBounds.max.y + menuOffset, 
+                                            hit_ref.transform.position.z);
+            move_menu.transform.position = menuPosition;
+            move_menu.transform.rotation = Quaternion.LookRotation(move_menu.transform.position - Camera.main.transform.position);
+        }
+        else if ( Input.GetButtonDown("js0") && buttonData.StartsWith("Rotate"))
+        {
+            rot_menu_bool = true;
+            rot_menu.SetActive(true);
+            Bounds objectBounds = hit_ref.GetComponent<Renderer>().bounds;
+            float objectHeight = objectBounds.size.y;
 
-    // public void disable_chr_ctrl()
-    // {
-    //     ctrl_chr = GameObject.Find("Character");
-    //     CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
-    //     char_control.enabled = false;
-    // }
-
-    // public void enable_chr_ctrl()
-    // {
-    //     ctrl_chr = GameObject.Find("Character");
-    //     CharacterController char_control = ctrl_chr.GetComponent<CharacterController>();
-    //     char_control.enabled = true;
-    // }
+            float menuOffset = 2.0f;
+            Vector3 menuPosition = new Vector3(hit_ref.transform.position.x, 
+                                            objectBounds.max.y + menuOffset, 
+                                            hit_ref.transform.position.z);
+            rot_menu.transform.position = menuPosition;
+            rot_menu.transform.rotation = Quaternion.LookRotation(rot_menu.transform.position - Camera.main.transform.position);
+        }
+        buttonData = "";
+        if (moveorrot_menu.activeSelf)
+        {
+            moveorrot_menu_bool = false;
+            moveorrot_menu.SetActive(false);
+        }    
+    }
 
 
     public void delete_plant()
     {
-        if (buttonData == "delete" && Input.GetButtonDown("js1"))
+        if (buttonData == "delete" && Input.GetButtonDown("js0"))
         {
             hit_ref.SetActive(false);
-            exit_func();
+        if (delete_menu.activeSelf)
+                {
+                    delete_menu_plant = false;
+                    delete_menu.SetActive(false);
+                }        
         }
         buttonData = "";
     }
 
     public void scale_all_dir()
     {
-        if (Input.GetButtonDown("js1") && buttonData == "scaleydown")
+        if (Input.GetButtonDown("js0") && buttonData == "scaleydown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z -= 0.2f;
             hit_ref.transform.localScale = newPosition;
+            buttonData = "";
         }
 
-        if (Input.GetButtonDown("js1") && buttonData == "scaleyup")
+        else if (Input.GetButtonDown("js0") && buttonData == "scaleyup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.z += 0.2f;
             hit_ref.transform.localScale = newPosition;
+             buttonData = "";
         }
-        if (Input.GetButtonDown("js1") && buttonData == "scalexdown")
+        else if (Input.GetButtonDown("js0") && buttonData == "scalexdown")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x -= 0.2f;
             hit_ref.transform.localScale = newPosition;
+            buttonData = "";
         }
-        if (Input.GetButtonDown("js1") && buttonData == "scalexup")
+        else if (Input.GetButtonDown("js0") && buttonData == "scalexup")
         {
             Vector3 newPosition = hit_ref.transform.localScale;
             newPosition.x += 0.2f;
             hit_ref.transform.localScale = newPosition;
+            buttonData = "";
         }
-        if(Input.GetButtonDown("js1") && buttonData.StartsWith("exit"))
+        else if(Input.GetButtonDown("js0") && buttonData.StartsWith("exit"))
         {
-            exit_func();
+            if (scale_menu.activeSelf)
+            {
+                is_scale_menu = false;
+                scale_menu.SetActive(false);
+             }     
+            buttonData = "";  
         }
-        buttonData = "";
 
     }
 
-
-    public void exit_func()
-    {
-        if (menu_loc.activeSelf)
-        {
-            dis_menu = false;
-            menu_loc.SetActive(false);
-        }
-        if (scale_menu.activeSelf)
-        {
-            is_scale_menu = false;
-            scale_menu.SetActive(false);
-        }
-        if (color_change_menu.activeSelf)
-        {
-            dis_col_menu = false;
-            color_change_menu.SetActive(false);
-        }
-        if (add_menu.activeSelf)
-        {
-            add_plant_bool = false;
-            add_menu.SetActive(false);
-        }
-        if (delete_menu.activeSelf)
-        {
-            delete_menu_plant = false;
-            delete_menu.SetActive(false);
-        }
-    }
 
     public void quit()
     {
